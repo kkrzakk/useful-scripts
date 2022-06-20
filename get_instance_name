@@ -1,20 +1,18 @@
-#Quick script to get instance name using instance id
+#As argument use provided api path
 from pprint import pprint
 import argparse
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--instance_id', '-i', help='Specify instance id')
-parser.add_argument('--project', '-p', help='Speciify project name')
-parser.add_argument('--zone', '-z', help='Specify zone')
+parser.add_argument('path', help='Paste path')
 args=parser.parse_args()
+values=args.path.split('/')
 credentials = GoogleCredentials.get_application_default()
 
 service = discovery.build('compute', 'v1', credentials=credentials)
 
-request = service.instances().get(project=args.project, zone=args.zone, instance=args.instance_id)
+request = service.instances().get(project=values[2], zone=values[4], instance=values[6])
 response = request.execute()
 
-#If you want you can delete 'name' to print all information from dict
 pprint(response['name'])
